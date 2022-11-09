@@ -1,22 +1,51 @@
-# password = chars > 8 and chars <= 16
-#           at least one capital letter
-#           at least one number
-#           at least one lower letter
+import ast
 import random
 
-lower_letter = "abcdefghijklmnopqrstuvwxyz"
-capital_letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-number = "0123456789"
 
-len_password = random.randint(9, 16)            #chars
-index_capital_letter = random.randint(1,4)
-index_number = random.randint(5,8)
+def give_me_password(len_password):
+    lower_letter = list("abcdefghijklmnopqrstuvwxyz")
+    capital_letter = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+    number = list("0123456789")
 
-for chars in range(len_password):
-    if index_capital_letter == chars:
-        print(random.choice(capital_letter), end='')
-    elif index_number == chars:
-        print(random.choice(number), end='')
+    index_capital_letter = random.randint(1, 4)
+    index_number = random.randint(5, 8)
+    password = []
+
+    for chars in range(len_password):
+        if index_capital_letter == chars:
+            password.append(random.choice(capital_letter))
+        elif index_number == chars:
+            password.append(random.choice(number))
+        else:
+            password.append(random.choice(lower_letter))
+    password = ''.join(password)
+    return password
+
+
+print("PASSWORD GENERATOR")
+my_dict = {}
+while True:
+    print("\n1. Generate a new password for an account.\n2. Get the password for a specified account.\n3. Exit")
+    option = input("Please choose an option: ")
+    if option == "1":
+        account = input("Enter an account: ")
+        my_dict[account] = give_me_password(random.randint(9, 16))
+        with open('password.txt', 'w') as data:
+            data.write(str(my_dict))
+        print(f'{account}: {my_dict.get(account)}')
+
+    elif option == "2":
+        account = input("Enter the name account: ")
+        with open('password.txt') as data:
+            info = data.read()
+            my_dict = ast.literal_eval(info)
+            if my_dict.get(account) is None:
+                print("Account no registered, please register it")
+            else:
+                print(f"{account} : {my_dict.get(account)}")
+    elif option == "3":
+        print("Exiting...")
+        break
     else:
-        print(random.choice(lower_letter), end='')
+        print("\nPlease choose a valid option.")
 
