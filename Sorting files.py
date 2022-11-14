@@ -1,5 +1,7 @@
+import shutil
 import pandas as pd
 import os
+from distutils.dir_util import copy_tree
 
 def csv_to_list(column_name):
     csv_reader = pd.read_csv('students.csv')
@@ -19,13 +21,27 @@ def find_pdf(path):
     for items in read_files:
         if items.endswith(".pdf"):
             pdf_list.append(items)
-    print(pdf_list)
+    return pdf_list
 
 
 def find_folders(path):
-    # folder_list = []
-    read_folders = next(os.walk('data'))[1]
-    return read_folders
+    folders_list = next(os.walk('data'))[1]
+    return folders_list
 
 
+def copy_pdf(pdf_list):
+    for items in pdf_list:
+        shutil.copy2(f'data/{items}', 'Tutorials')
+    return print("Pdf copied")
 
+
+def copy_folders(folders_list):
+    for items in folders_list:
+        os.mkdir(f'Games/{items}')
+        copy_tree(f'data/{items}', f'Games/{items}')
+    return print("Folders copied")
+
+
+create_folder(csv_to_list('Name'))
+copy_pdf(find_pdf('data'))
+copy_folders(find_folders('data'))
