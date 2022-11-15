@@ -25,7 +25,7 @@ def find_pdf(path):
 
 
 def find_folders(path):
-    folders_list = next(os.walk('data'))[1]
+    folders_list = next(os.walk(path))[1]
     return folders_list
 
 
